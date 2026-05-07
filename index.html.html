@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060a18;
+  --bg2:#0a1022;
+  --bg3:#0d1428;
+  --gold:#C9A96B;
+  --gold2:#D8BC7C;
+  --gold3:#e8d5a8;
+  --text:#F0E8DC;
+  --text2:#B8AFA0;
+  --text3:#7A7268;
+  --border:rgba(201,169,107,0.15);
+  --border2:rgba(201,169,107,0.35);
+  --serif:'Noto Serif KR',Georgia,serif;
+  --sans:'Noto Sans KR',sans-serif;
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:var(--sans);color:var(--text2);background:var(--bg);font-size:15px;line-height:1.85;overflow-x:hidden}
+
+.bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+
+.fade,.fi{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+.fade.visible,.fade.v,.fi.v{opacity:1;transform:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 3rem;height:52px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,10,24,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--serif);font-size:15px;color:var(--gold3);font-weight:300;letter-spacing:.14em;cursor:pointer}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.75rem;color:var(--text3);text-decoration:none;letter-spacing:.12em;font-weight:300;transition:color .3s}
+.nav-links a:hover{color:var(--text2)}
+.nav-menu{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
+.nav-menu span{display:block;width:22px;height:1px;background:var(--text3);transition:all .3s}
+
+section{padding:5.5rem 3rem;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+
+.sec-label{font-size:.68rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:.75rem;display:flex;align-items:center;gap:.6rem}
+.sec-label::before{content:'';width:20px;height:1px;background:var(--gold);opacity:.5}
+.sec-title{font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,1.85rem);font-weight:300;color:var(--text)}
+.sec-meta{font-size:.8rem;color:var(--text3);margin-top:.4rem}
+
+#home{padding-top:8rem;padding-bottom:5.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1100px;margin:0 auto;border-top:none}
+.hero-text{padding-top:2rem}
+.hero-tag{font-size:.68rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem}
+.hero-tag::before{content:'';width:20px;height:1px;background:var(--gold);opacity:.5}
+.hero-title{font-family:var(--serif);font-size:clamp(2rem,4vw,2.9rem);line-height:1.3;color:var(--text);font-weight:300;margin-bottom:1.5rem}
+.hero-title em{font-style:normal;color:var(--gold2)}
+.hero-desc{font-size:.88rem;color:var(--text2);line-height:1.9;max-width:380px;font-weight:300;margin-bottom:2.5rem}
+.hero-scroll{font-size:.72rem;letter-spacing:.14em;color:var(--text3);display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:color .3s}
+.hero-scroll::before{content:'';display:block;width:32px;height:1px;background:var(--text3)}
+.hero-scroll:hover{color:var(--gold)}
+.hero-visual{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.hero-img{background:var(--bg2);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative}
+.hero-img:first-child{grid-column:1/3;aspect-ratio:16/9;font-size:3rem}
+.img-label{position:absolute;bottom:10px;left:12px;font-size:.65rem;letter-spacing:.12em;color:var(--text3)}
+
+#works{max-width:1100px;margin:0 auto;padding:5.5rem 3rem;border-top:1px solid var(--border);position:relative;z-index:1}
+.sec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2.5rem}
+
+.works-filter{display:flex;gap:.6rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.filter-btn{font-size:.72rem;letter-spacing:.1em;color:var(--text3);border:1px solid var(--border);background:transparent;padding:.35rem .9rem;border-radius:1px;cursor:pointer;transition:all .25s;font-family:var(--sans)}
+.filter-btn:hover{color:var(--text2);border-color:var(--border2)}
+.filter-btn.active{color:var(--gold);border-color:var(--gold);background:rgba(201,169,107,.06)}
+
+.works-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.work-card{background:var(--bg);padding:1.5rem 1.4rem;transition:background .3s;position:relative;overflow:hidden;cursor:pointer}
+.work-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .35s}
+.work-card:hover{background:var(--bg2)}
+.work-card:hover::after{opacity:1}
+.work-thumb{overflow:hidden;background:var(--bg2);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;margin-bottom:1.1rem;position:relative}
+.work-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.work-title{font-family:var(--serif);font-size:.95rem;color:var(--text);font-weight:300;margin-bottom:.4rem;line-height:1.4}
+.card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:.8rem;padding-top:.8rem;border-top:1px solid var(--border)}
+.card-cat{font-size:.65rem;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;opacity:.8}
+.card-yr{font-size:.7rem;color:var(--text3)}
+.work-tag{display:inline-block;padding:.25rem .7rem;border:1px solid var(--border);border-radius:1px;font-size:.65rem;letter-spacing:.08em;color:var(--text3);margin:.2rem .2rem 0 0}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:3rem 1rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg3);border:1px solid var(--border);max-width:780px;width:100%;padding:2.5rem 3rem;position:relative;margin:auto}
+.modal-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--text3);line-height:1;transition:color .25s}
+.modal-close:hover{color:var(--gold)}
+.modal-cat{font-size:.65rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:.75rem;opacity:.8}
+.modal-title{font-family:var(--serif);font-size:1.65rem;color:var(--text);margin-bottom:.4rem;font-weight:300}
+.modal-date{font-size:.75rem;color:var(--text3);margin-bottom:2rem}
+.modal-imgs{display:grid;gap:1px;background:var(--border);margin-bottom:2rem}
+.modal-img{background:var(--bg2);aspect-ratio:1;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.modal-img img{width:100%;height:100%;object-fit:cover;display:block}
+.spec-list{border-top:1px solid var(--border);margin-bottom:1.75rem}
+.spec-row{display:flex;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border)}
+.spec-key{font-size:.7rem;letter-spacing:.14em;color:var(--text3);text-transform:uppercase;min-width:90px;flex-shrink:0}
+.spec-val{font-size:.85rem;color:var(--text2)}
+.modal-section{margin-bottom:1.5rem}
+.modal-section h4{font-size:.68rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem;font-weight:400;opacity:.8}
+.modal-section p{font-size:.85rem;color:var(--text2);line-height:1.9;font-weight:300}
+.modal-comment{border-left:1px solid var(--border2);padding-left:1.25rem;font-family:var(--serif);font-size:1rem;color:var(--text2);line-height:1.8;font-weight:300;margin-top:1.5rem}
+
+#mockup{position:relative;z-index:1;border-top:1px solid var(--border)}
+#mockup .inner{max-width:1100px;margin:0 auto;padding:5.5rem 3rem}
+.mockup-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.mockup-imgs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.mockup-img{background:var(--bg2);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.mockup-img.wide{grid-column:1/3;aspect-ratio:2/1}
+.mockup-desc{font-size:.87rem;color:var(--text2);line-height:1.9;font-weight:300;margin-bottom:1.2rem}
+.mockup-note{font-size:.75rem;color:var(--text3);letter-spacing:.05em}
+
+#about{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;max-width:1100px;margin:0 auto;border-top:1px solid var(--border);position:relative;z-index:1}
+.about-portrait{background:var(--bg2);border:1px solid var(--border);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:5rem}
+.about-content .sec-title{margin-top:.5rem;margin-bottom:1.5rem}
+.about-para{font-size:.87rem;color:var(--text2);line-height:1.95;font-weight:300;margin-bottom:1.25rem}
+.about-divider{width:40px;height:1px;background:var(--border2);margin:2rem 0}
+.about-spec-title{font-size:.68rem;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-bottom:1rem}
+.env-list{list-style:none}
+.env-list li{font-size:.83rem;color:var(--text2);padding:.55rem 0;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:.75rem}
+.env-list li::before{content:'—';color:var(--gold);opacity:.45;flex-shrink:0;font-size:.7rem}
+
+#contact{max-width:640px;margin:0 auto;text-align:center;padding-bottom:7rem;border-top:1px solid var(--border);position:relative;z-index:1}
+.contact-intro{font-size:.87rem;color:var(--text2);line-height:1.9;font-weight:300;margin:1.25rem auto 2.5rem;max-width:420px}
+.contact-form{text-align:left}
+.form-row{margin-bottom:1.25rem}
+.form-row label{font-size:.68rem;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;display:block;margin-bottom:.45rem;font-weight:300}
+.form-row input,.form-row textarea,.form-row select{width:100%;background:var(--bg2);border:1px solid var(--border);padding:.65rem .9rem;color:var(--text);font-size:.85rem;font-family:var(--sans);font-weight:300;border-radius:1px;outline:none;transition:border-color .25s;resize:none}
+.form-row textarea{height:120px}
+.form-row input:focus,.form-row textarea:focus,.form-row select:focus{border-color:var(--border2)}
+.form-row input::placeholder,.form-row textarea::placeholder{color:var(--text3)}
+.form-row select{appearance:none;-webkit-appearance:none}
+.form-row option{background:var(--bg2);color:var(--text)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.submit-btn{width:100%;padding:.75rem;background:var(--gold);color:var(--bg);border:none;border-radius:1px;font-family:var(--sans);font-size:.73rem;letter-spacing:.14em;cursor:pointer;font-weight:400;transition:background .25s;margin-top:.5rem}
+.submit-btn:hover{background:var(--gold2)}
+.contact-email{margin-top:2rem;font-size:.75rem;color:var(--text3)}
+.contact-email a{color:var(--text2);text-decoration:none;transition:color .3s}
+.contact-email a:hover{color:var(--gold)}
+
+footer{border-top:1px solid var(--border);padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.footer-logo{font-family:var(--serif);color:var(--text3);font-weight:300;letter-spacing:.12em;font-size:.9rem}
+.footer-copy{font-size:.72rem;color:var(--text3);opacity:.6;letter-spacing:.06em}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:.85rem 1.5rem;font-size:.8rem;font-weight:300;opacity:0;transition:opacity .3s;z-index:300;pointer-events:none;border-radius:1px}
+.toast.show{opacity:1}
+
+@media(max-width:768px){
+  nav{padding:0 1.5rem}
+  .nav-links{display:none}
+  .nav-menu{display:flex}
+  #home{grid-template-columns:1fr;padding-top:5rem;gap:2rem}
+  section,#works{padding:3.5rem 1.5rem}
+  .works-grid{grid-template-columns:1fr 1fr}
+  #about{grid-template-columns:1fr;padding:3.5rem 1.5rem}
+  .about-portrait{aspect-ratio:1;max-width:200px}
+  #mockup .inner{padding:3.5rem 1.5rem}
+  .mockup-grid{grid-template-columns:1fr}
+  .modal{padding:1.75rem 1.5rem}
+  .form-grid{grid-template-columns:1fr}
+  footer{padding:1.5rem;flex-direction:column;gap:.75rem;text-align:center}
+  #contact{padding:3.5rem 1.5rem 5rem}
+}
+@media(max-width:480px){
+  .works-grid{grid-template-columns:1fr}
+  .hero-visual{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-deco">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+    <circle cx="1220" cy="160" r="90" fill="none" stroke="#C9A96B" stroke-width="0.4" opacity="0.08"/>
+    <circle cx="1220" cy="160" r="115" fill="none" stroke="#C9A96B" stroke-width="0.3" opacity="0.04"/>
+    <path d="M0,900 L0,620 L200,420 L400,520 L600,340 L800,460 L1000,300 L1200,420 L1440,320 L1440,900 Z" fill="rgba(201,169,107,0.018)"/>
+    <path d="M0,820 C360,796 720,844 1080,812 S1440,830 1440,820" fill="none" stroke="#C9A96B" stroke-width="0.6" opacity="0.06"/>
+    <path d="M0,852 C360,834 720,868 1080,845 S1440,860 1440,852" fill="none" stroke="#C9A96B" stroke-width="0.4" opacity="0.04"/>
+  </svg>
+</div>
+
+<nav>
+  <div class="nav-logo" onclick="scrollTo({top:0,behavior:'smooth'})">studio won</div>
+  <ul class="nav-links">
+    <li><a href="#works" onclick="nav(event,'works')">작업물</a></li>
+    <li><a href="#mockup" onclick="nav(event,'mockup')">묵업</a></li>
+    <li><a href="#about" onclick="nav(event,'about')">소개</a></li>
+    <li><a href="#contact" onclick="nav(event,'contact')">문의</a></li>
+  </ul>
+  <button class="nav-menu" aria-label="메뉴" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="fade">
+  <div class="hero-text">
+    <p class="hero-tag">3D Printing Workshop</p>
+    <h1 class="hero-title">3D 프린터로<br><em>직접 만든</em><br>작업 기록</h1>
+    <p class="hero-desc">생활 속에서 필요한 것들을 3D 프린터로 직접 제작해왔습니다. 그동안 만든 작업들을 카테고리별로 정리해둔 공간입니다.</p>
+    <div class="hero-scroll" onclick="scrollToSec('works')">작업물 보기</div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-img">🖨️<span class="img-label">작업실</span></div>
+    <div class="hero-img">🔧<span class="img-label">공구 거치대</span></div>
+    <div class="hero-img">🪴<span class="img-label">화분 홀더</span></div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="sec-header fade">
+    <div>
+      <div class="sec-label">Archive</div>
+      <div class="sec-title">작업 아카이브</div>
+      <div class="sec-meta">2021 — 현재</div>
+    </div>
+  </div>
+
+  <div class="works-filter fade">
+    <button class="filter-btn active" onclick="filterWorks('all',this)">전체</button>
+    <button class="filter-btn" onclick="filterWorks('edc',this)">Everyday Carry</button>
+    <button class="filter-btn" onclick="filterWorks('gaming',this)">Gaming</button>
+    <button class="filter-btn" onclick="filterWorks('tool',this)">Tool &amp; Industrial</button>
+    <button class="filter-btn" onclick="filterWorks('figure',this)">Figure &amp; Art</button>
+    <button class="filter-btn" onclick="filterWorks('stand',this)">Stand &amp; Holder</button>
+  </div>
+
+  <div class="works-grid" id="worksGrid"></div>
+</section>
+
+<!-- MOCKUP -->
+<div id="mockup">
+  <div class="inner">
+    <div class="mockup-grid fade">
+      <div class="mockup-imgs">
+        <div class="mockup-img wide">📐</div>
+        <div class="mockup-img">🔩</div>
+        <div class="mockup-img">⚙️</div>
+      </div>
+      <div class="mockup-text">
+        <div class="sec-label">Industrial Mockup</div>
+        <div class="sec-title" style="margin-bottom:1.25rem">묵업 · 프로토타입</div>
+        <p class="mockup-desc">공구 회사 의뢰로 제작한 묵업 작업입니다. 양산 전 형태, 그립감, 무게중심을 검토하기 위한 목적으로 제작되었습니다. 치수 오차 ±0.1mm 이내를 기준으로 하며, 소재 선택부터 후가공까지 직접 진행합니다.</p>
+        <p class="mockup-note">* 협업 문의는 하단 Contact에서 주세요.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="fade">
+  <div class="about-portrait">🧑‍🔧</div>
+  <div class="about-content">
+    <div class="sec-label">About</div>
+    <div class="sec-title" style="margin-bottom:1.5rem">혼자 작업합니다</div>
+    <p class="about-para">2021년부터 3D 프린팅을 시작했습니다. 초반에는 공개 파일을 받아서 출력하는 것부터 시작했고, 이후 직접 모델링하는 방식으로 전환했습니다.</p>
+    <p class="about-para">주로 생활 속에서 필요한 것들을 만듭니다. 시중에 마땅한 제품이 없거나, 치수가 맞지 않을 때 직접 설계해서 출력하는 방식입니다.</p>
+    <p class="about-para">현재까지 작업한 것들을 이 사이트에 정리하고 있습니다.</p>
+    <div class="about-divider"></div>
+    <p class="about-spec-title">장비 · 환경</p>
+    <ul class="env-list">
+      <li>Bambu Lab A1 Mini (주력기)</li>
+      <li>Ender 3 V2 (튜닝 겸 보조기)</li>
+      <li>Fusion 360 · Blender (모델링)</li>
+      <li>PLA / PETG / TPU 소재 위주</li>
+      <li>후가공: 사포, 서페이서, 도색</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="fade">
+  <div class="sec-label">Contact</div>
+  <div class="sec-title" style="margin-bottom:1.25rem">문의하기</div>
+  <p class="contact-intro">비슷한 작업이 필요하시거나 궁금한 점이 있으면 편하게 연락 주세요.</p>
+
+  <div class="contact-form">
+    <div class="form-grid">
+      <div class="form-row">
+        <label>이름</label>
+        <input type="text" placeholder="홍길동" id="f-name">
+      </div>
+      <div class="form-row">
+        <label>이메일</label>
+        <input type="email" placeholder="hello@example.com" id="f-email">
+      </div>
+    </div>
+    <div class="form-row">
+      <label>문의 유형</label>
+      <select id="f-type">
+        <option value="">선택해 주세요</option>
+        <option>제작 의뢰</option>
+        <option>묵업 / 프로토타입 협업</option>
+        <option>작업 관련 질문</option>
+        <option>기타</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>내용</label>
+      <textarea placeholder="어떤 작업이 필요하신지 간단히 적어주세요." id="f-msg"></textarea>
+    </div>
+    <button class="submit-btn" onclick="submitForm()">보내기</button>
+    <p class="contact-email">이메일로 직접 보내셔도 됩니다: <a href="mailto:studio.won@email.com">studio.won@email.com</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">studio won</div>
+  <div class="footer-copy">© 2024 studio won (도원) · 3D 프린팅 작업 기록</div>
+</footer>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">문의가 전송되었습니다. 확인 후 연락드리겠습니다.</div>
+
+<script>
+const works=[
+  {id:1,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'록 드릴 비트 프로토타입',date:'2024',tags:['PETG','프로토타입','드릴'],coverImage:'images/works/tool/tool_rock-drill-bit-prototype1_cover.jpg',images:['images/works/tool/tool_rock-drill-bit-prototype1_detail.jpg','images/works/tool/tool_rock-drill-bit-prototype2_detail.jpg','images/works/tool/tool_rock-drill-bit-prototype3_detail.jpg','images/works/tool/tool_rock-drill-bit-prototype4_detail.jpg','images/works/tool/tool_rock-drill-bit-prototype5_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:2,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'머신 안전 부품',date:'2024',tags:['PETG','안전','산업'],coverImage:'images/works/tool/tool_machine-safety1_cover.jpg',images:['images/works/tool/tool_machine-safety1_detail.jpg','images/works/tool/tool_machine-safety2_detail.jpg','images/works/tool/tool_machine-safety3_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:3,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'가드레일 도색 기계 프로토타입',date:'2024',tags:['PETG','프로토타입','도색'],coverImage:'images/works/tool/tool_guardrail-paint-machine-prototype-v1_cover.jpg',images:['images/works/tool/tool_guardrail-paint-machine-prototype-v1_detail.jpg','images/works/tool/tool_guardrail-paint-machine-prototype-v2_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:4,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'백 챔퍼 비트',date:'2024',tags:['PETG','비트','공구'],coverImage:'images/works/tool/tool_back-chamfer-bit_cover.jpg',images:['images/works/tool/tool_back-chamfer-bit_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:5,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'크랭크 샤프트',date:'2024',tags:['PETG','샤프트','기계'],coverImage:'images/works/tool/tool_crank-shaft_cover.jpg',images:['images/works/tool/tool_crank-shaft_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:6,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'커터 부품',date:'2024',tags:['PETG','커터','부품'],coverImage:'images/works/tool/tool_cutter-part_cover.jpg',images:['images/works/tool/tool_cutter-part_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:7,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'드릴 비트 프로토타입',date:'2024',tags:['PETG','드릴','프로토타입'],coverImage:'images/works/tool/tool_drill-bit-prototype_cover.jpg',images:['images/works/tool/tool_drill-bit-prototype_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:8,cat:'tool',catLabel:'Tool & Industrial',emoji:'🔧',title:'공구 부품',date:'2024',tags:['PETG','공구','부품'],coverImage:'images/works/tool/tool_tools1_cover.jpg',images:['images/works/tool/tool_tools1_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PETG / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:9,cat:'edc',catLabel:'Everyday Carry',emoji:'🧳',title:'바이크 헬멧 쉘',date:'2024',tags:['PLA','헬멧','EDC'],coverImage:'images/works/edc/edc_bike-helmet-shell-v1-front_cover.jpg',images:['images/works/edc/edc_bike-helmet-shell-v1-front_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:10,cat:'edc',catLabel:'Everyday Carry',emoji:'🧳',title:'차키 케이스',date:'2024',tags:['PLA','차키','EDC'],coverImage:'images/works/edc/edc_car-key-case-v1-front_cover.jpg',images:['images/works/edc/edc_car-key-case-v1-front_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:11,cat:'edc',catLabel:'Everyday Carry',emoji:'🧳',title:'갤럭시 핏 밴드',date:'2024',tags:['TPU','밴드','웨어러블'],coverImage:'images/works/edc/edc_galaxy-fit-band-v1-side_cover.jpg',images:['images/works/edc/edc_galaxy-fit-band-v1-side_detail.jpg','images/works/edc/edc_galaxy-fit-band-v1-wear_detail.jpg','images/works/edc/edc_galaxy-fit-band-v2-wear_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'TPU / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:12,cat:'edc',catLabel:'Everyday Carry',emoji:'🧳',title:'칼집',date:'2024',tags:['PLA','칼','EDC'],coverImage:'images/works/edc/edc_knife-sheath-v1-front_cover.jpg',images:['images/works/edc/edc_knife-sheath-v1-front_detail.jpg','images/works/edc/edc_knife-sheath-v2-front_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:13,cat:'edc',catLabel:'Everyday Carry',emoji:'🧳',title:'전자담배 거치대',date:'2024',tags:['PLA','전자담배','EDC'],coverImage:'images/works/edc/edc_vape-device-stand-v1-front_cover.jpg',images:['images/works/edc/edc_vape-device-stand-v1-front_detail.jpg','images/works/edc/edc_vape-device-stand-v2-front_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:14,cat:'edc',catLabel:'Everyday Carry',emoji:'🧳',title:'전자담배 모드 케이스',date:'2024',tags:['PLA','전자담배','케이스'],coverImage:'images/works/edc/edc_vape-mod-case-v1-front_cover.jpg',images:['images/works/edc/edc_vape-mod-case-v1-front_detail.jpg','images/works/edc/edc_vape-mod-case-v1-detail_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:15,cat:'figure',catLabel:'Figure & Art',emoji:'🎭',title:'먹방 캐릭터 티슈 케이스',date:'2024',tags:['PLA','피규어','소품'],coverImage:'images/works/figure/figure_charactor-meokbang-tissuecase_cover.jpg',images:['images/works/figure/figure_charactor-meokbang-tissuecase_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:16,cat:'figure',catLabel:'Figure & Art',emoji:'🎭',title:'검도 메달 (동백)',date:'2024',tags:['레진','메달','검도'],coverImage:'images/works/figure/figure_medal-gunsankendo-dongbaek-1_cover.jpg',images:['images/works/figure/figure_medal-gunsankendo-dongbaek-1_detail.jpg','images/works/figure/figure_medal-gunsankendo-dongbaek-2_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'레진 / 출력 방식: MSLA',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:17,cat:'figure',catLabel:'Figure & Art',emoji:'🎭',title:'미니어처 워리어 (레진)',date:'2024',tags:['레진','미니어처','피규어'],coverImage:'images/works/figure/figure_miniature-warrior-resin-print-1_cover.jpg',images:['images/works/figure/figure_miniature-warrior-resin-print-1_detail.jpg','images/works/figure/figure_miniature-warrior-resin-print-2_detail.jpg','images/works/figure/figure_miniature-warrior-resin-print-3_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'레진 / 출력 방식: MSLA',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:18,cat:'gaming',catLabel:'Gaming',emoji:'🎮',title:'볼링 액세서리 트레이',date:'2024',tags:['PLA','볼링','트레이'],coverImage:'images/works/gaming/gaming_bowling-accessory-tray_cover.jpg',images:['images/works/gaming/gaming_bowling-accessory-tray_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:19,cat:'gaming',catLabel:'Gaming',emoji:'🎮',title:'기어 타워 홀더',date:'2024',tags:['PLA','기어','홀더'],coverImage:'images/works/gaming/gaming_gear-tower-holder_cover.jpg',images:['images/works/gaming/gaming_gear-tower-holder_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:20,cat:'gaming',catLabel:'Gaming',emoji:'🎮',title:'로봇 RC카',date:'2024',tags:['PLA','RC카','로봇'],coverImage:'images/works/gaming/gaming_robot-rccar_cover.jpg',images:['images/works/gaming/gaming_robot-rccar_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:21,cat:'gaming',catLabel:'Gaming',emoji:'🎮',title:'스위치 컨트롤러 그립',date:'2024',tags:['PLA','닌텐도','그립'],coverImage:'images/works/gaming/gaming_switch-controller-grip_cover.jpg',images:['images/works/gaming/gaming_switch-controller-grip_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:22,cat:'stand',catLabel:'Stand & Holder',emoji:'📌',title:'산업용 라벨 홀더',date:'2024',tags:['PLA','라벨','홀더'],coverImage:'images/works/stand/stand_industrial-label-holder-v1_cover.jpg',images:['images/works/stand/stand_industrial-label-holder-v1_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+  {id:23,cat:'stand',catLabel:'Stand & Holder',emoji:'📌',title:'공구 식별 태그',date:'2024',tags:['PLA','태그','공구'],coverImage:'images/works/stand/stand_tool-identification-tag-v1-all_cover.jpg',images:['images/works/stand/stand_tool-identification-tag-v1-all_detail.jpg','images/works/stand/stand_tool-identification-tag-v1-front_detail.jpg'],reason:'임시 텍스트입니다. 직접 수정해 주세요.',process:'임시 텍스트입니다. 직접 수정해 주세요.',material:'PLA / 출력 방식: FDM',comment:'임시 텍스트입니다. 직접 수정해 주세요.'},
+];
+
+let filtered=[...works];
+
+function renderWorks(){
+  const g=document.getElementById('worksGrid');
+  g.innerHTML=filtered.map(w=>`
+    <div class="work-card fade" onclick="openWork(${w.id})">
+      <div class="work-thumb">${w.coverImage?`<img src="${w.coverImage}" alt="${w.title}">`:`<span style="font-size:2.8rem">${w.emoji}</span>`}</div>
+      <div class="work-title">${w.title}</div>
+      <div class="card-meta">
+        <span class="card-cat">${w.catLabel}</span>
+        <span class="card-yr">${w.date}</span>
+      </div>
+      <div style="margin-top:.6rem">${w.tags.map(t=>`<span class="work-tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+  observeFade();
+}
+
+function filterWorks(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filtered=cat==='all'?[...works]:works.filter(w=>w.cat===cat);
+  renderWorks();
+}
+
+function openWork(id){
+  const w=works.find(x=>x.id===id);
+  const cols=w.images.length===1?'1fr':w.images.length===2?'1fr 1fr':'1fr 1fr 1fr';
+  document.getElementById('modal-content').innerHTML=`
+    <div class="modal-cat">${w.catLabel}</div>
+    <h2 class="modal-title">${w.title}</h2>
+    <p class="modal-date">${w.date}</p>
+    <div class="modal-imgs" style="grid-template-columns:${cols}">
+      ${w.images.slice(0,3).map(src=>`<div class="modal-img"><img src="${src}" alt=""></div>`).join('')}
+    </div>
+    <div class="spec-list">
+      <div class="spec-row"><span class="spec-key">소재</span><span class="spec-val">${w.material.split('/')[0].trim()}</span></div>
+      <div class="spec-row"><span class="spec-key">출력 방식</span><span class="spec-val">${w.material.split('/')[1]?.trim()||'FDM'}</span></div>
+      <div class="spec-row"><span class="spec-key">태그</span><span class="spec-val">${w.tags.join(', ')}</span></div>
+    </div>
+    <div class="modal-section"><h4>만든 계기</h4><p>${w.reason}</p></div>
+    <div class="modal-section"><h4>제작 과정</h4><p>${w.process}</p></div>
+    <blockquote class="modal-comment">${w.comment}</blockquote>
+  `;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target===this)closeModal();
+});
+
+function submitForm(){
+  const name=document.getElementById('f-name').value;
+  const email=document.getElementById('f-email').value;
+  const msg=document.getElementById('f-msg').value;
+  if(!name||!email||!msg){alert('이름, 이메일, 내용을 입력해 주세요.');return;}
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+  document.getElementById('f-name').value='';
+  document.getElementById('f-email').value='';
+  document.getElementById('f-msg').value='';
+  document.getElementById('f-type').value='';
+}
+
+function nav(e,id){e.preventDefault();scrollToSec(id)}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+
+function observeFade(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+    });
+  },{threshold:.08});
+  document.querySelectorAll('.fade:not(.visible)').forEach(el=>obs.observe(el));
+}
+
+let mobileMenuOpen=false;
+function toggleMobileMenu(){
+  mobileMenuOpen=!mobileMenuOpen;
+  const links=document.querySelector('.nav-links');
+  if(mobileMenuOpen){
+    links.style.cssText='display:flex;flex-direction:column;position:fixed;top:52px;left:0;right:0;background:var(--bg);padding:2rem;gap:1.5rem;border-bottom:1px solid var(--border);z-index:99';
+  }else{
+    links.style.cssText='display:none';
+  }
+}
+
+renderWorks();
+observeFade();
+</script>
+</body>
+</html>
